@@ -1,0 +1,2276 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.7.1"
+    },
+    "colab": {
+      "name": "dz2.ipynb\"",
+      "provenance": [],
+      "collapsed_sections": []
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "FmDJPWm7TgT2"
+      },
+      "source": [
+        "### Переходим к практике"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "qWc739n1YNN0",
+        "outputId": "a1ec5fc6-1a5c-4af9-8f18-753c9530a16a"
+      },
+      "source": [
+        "!pip install razdel"
+      ],
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Collecting razdel\n",
+            "  Downloading https://files.pythonhosted.org/packages/15/2c/664223a3924aa6e70479f7d37220b3a658765b9cfe760b4af7ffdc50d38f/razdel-0.5.0-py3-none-any.whl\n",
+            "Installing collected packages: razdel\n",
+            "Successfully installed razdel-0.5.0\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UMwYMdlFYN6s",
+        "outputId": "6f86f377-1d44-42dc-d8bd-26a4a7abe475"
+      },
+      "source": [
+        "!pip install pymorphy2"
+      ],
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Collecting pymorphy2\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/07/57/b2ff2fae3376d4f3c697b9886b64a54b476e1a332c67eee9f88e7f1ae8c9/pymorphy2-0.9.1-py3-none-any.whl (55kB)\n",
+            "\r\u001b[K     |██████                          | 10kB 16.3MB/s eta 0:00:01\r\u001b[K     |███████████▉                    | 20kB 22.4MB/s eta 0:00:01\r\u001b[K     |█████████████████▊              | 30kB 12.2MB/s eta 0:00:01\r\u001b[K     |███████████████████████▋        | 40kB 9.7MB/s eta 0:00:01\r\u001b[K     |█████████████████████████████▌  | 51kB 8.4MB/s eta 0:00:01\r\u001b[K     |████████████████████████████████| 61kB 5.3MB/s \n",
+            "\u001b[?25hCollecting dawg-python>=0.7.1\n",
+            "  Downloading https://files.pythonhosted.org/packages/6a/84/ff1ce2071d4c650ec85745766c0047ccc3b5036f1d03559fd46bb38b5eeb/DAWG_Python-0.7.2-py2.py3-none-any.whl\n",
+            "Requirement already satisfied: docopt>=0.6 in /usr/local/lib/python3.6/dist-packages (from pymorphy2) (0.6.2)\n",
+            "Collecting pymorphy2-dicts-ru<3.0,>=2.4\n",
+            "\u001b[?25l  Downloading https://files.pythonhosted.org/packages/3a/79/bea0021eeb7eeefde22ef9e96badf174068a2dd20264b9a378f2be1cdd9e/pymorphy2_dicts_ru-2.4.417127.4579844-py2.py3-none-any.whl (8.2MB)\n",
+            "\u001b[K     |████████████████████████████████| 8.2MB 11.2MB/s \n",
+            "\u001b[?25hInstalling collected packages: dawg-python, pymorphy2-dicts-ru, pymorphy2\n",
+            "Successfully installed dawg-python-0.7.2 pymorphy2-0.9.1 pymorphy2-dicts-ru-2.4.417127.4579844\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xL7Tjvq5Xllu",
+        "outputId": "226214e3-c783-4dc6-8675-de15db8e10eb"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/gdrive')"
+      ],
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Mounted at /gdrive\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-3e3C-lWXnU_",
+        "outputId": "4ef6fa6f-5264-4091-d555-2c6c1f5f5c09"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ],
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Mounted at /content/drive\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tSeiFLsFTgT2"
+      },
+      "source": [
+        "import pandas as pd"
+      ],
+      "execution_count": 7,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "A9r_fVL8TgT2"
+      },
+      "source": [
+        "Наши новости"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 159
+        },
+        "id": "TMMRLWpYTgT3",
+        "outputId": "6ad2f7dc-5c8c-47fa-b0d3-dfe5ea383ea1"
+      },
+      "source": [
+        "news = pd.read_csv('/content/drive/MyDrive/Notebooks/ML_in_business/2/lection2_materials/articles.csv')\n",
+        "print(news.shape)\n",
+        "news.head(3)"
+      ],
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "(27000, 2)\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>doc_id</th>\n",
+              "      <th>title</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>6</td>\n",
+              "      <td>Заместитель председателяnправительства РФnСерг...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>4896</td>\n",
+              "      <td>Матч 1/16 финала Кубка России по футболу был п...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>4897</td>\n",
+              "      <td>Форвард «Авангарда» Томаш Заборский прокоммент...</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "   doc_id                                              title\n",
+              "0       6  Заместитель председателяnправительства РФnСерг...\n",
+              "1    4896  Матч 1/16 финала Кубка России по футболу был п...\n",
+              "2    4897  Форвард «Авангарда» Томаш Заборский прокоммент..."
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "tkB43pvJTgT3"
+      },
+      "source": [
+        "Загрузим пользователей и списки последних прочитанных новостей"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wPj5cQXTTgT3",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 142
+        },
+        "outputId": "8b812d29-4a46-4690-e722-2159ae93e457"
+      },
+      "source": [
+        "users = pd.read_csv(\"/content/drive/MyDrive/Notebooks/ML_in_business/2/lection2_materials/users_articles.csv\")\n",
+        "users.head(3)"
+      ],
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>uid</th>\n",
+              "      <th>articles</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>u105138</td>\n",
+              "      <td>[293672, 293328, 293001, 293622, 293126, 1852]</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>u108690</td>\n",
+              "      <td>[3405, 1739, 2972, 1158, 1599, 322665]</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>u108339</td>\n",
+              "      <td>[1845, 2009, 2356, 1424, 2939, 323389]</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "       uid                                        articles\n",
+              "0  u105138  [293672, 293328, 293001, 293622, 293126, 1852]\n",
+              "1  u108690          [3405, 1739, 2972, 1158, 1599, 322665]\n",
+              "2  u108339          [1845, 2009, 2356, 1424, 2939, 323389]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 9
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "-gloVfJsTgT4"
+      },
+      "source": [
+        "Итак, нам нужно получить векторные представления пользователей на основе прочитанным ими новостей и самих новостей"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "KaVUmc1tTgT4"
+      },
+      "source": [
+        "### 1. Получаем векторные представления новостей"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "JcMJGuoxTgT4"
+      },
+      "source": [
+        "#from gensim.test.utils import common_texts\n",
+        "from gensim.corpora.dictionary import Dictionary"
+      ],
+      "execution_count": 10,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "NAkKweCBYonf",
+        "outputId": "ffd71979-a0c8-4f30-f66e-0a2718693a2f"
+      },
+      "source": [
+        "import nltk\n",
+        "nltk.download('stopwords')"
+      ],
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "[nltk_data] Downloading package stopwords to /root/nltk_data...\n",
+            "[nltk_data]   Unzipping corpora/stopwords.zip.\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "True"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 11
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "GPNeaYC4TgT4"
+      },
+      "source": [
+        "#предобработка текстов\n",
+        "import re\n",
+        "import numpy as np\n",
+        "from nltk.corpus import stopwords\n",
+        "#from nltk.tokenize import word_tokenize\n",
+        "\n",
+        "from razdel import tokenize # https://github.com/natasha/razdel\n",
+        "#!pip install razdel\n",
+        "\n",
+        "import pymorphy2  # pip install pymorphy2"
+      ],
+      "execution_count": 12,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "KWk32cFATgT4"
+      },
+      "source": [
+        "stopword_ru = stopwords.words('russian')\n",
+        "len(stopword_ru)\n",
+        "\n",
+        "morph = pymorphy2.MorphAnalyzer()"
+      ],
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "zDpI-XwvTgT5",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "1d6953bb-e12a-4dc7-d1e9-3b5b724fe549"
+      },
+      "source": [
+        "with open('/content/drive/MyDrive/Notebooks/ML_in_business/2/lection2_materials/stopwords.txt') as f:\n",
+        "    additional_stopwords = [w.strip() for w in f.readlines() if w]\n",
+        "stopword_ru += additional_stopwords\n",
+        "len(stopword_ru)"
+      ],
+      "execution_count": 14,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "776"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 14
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "nj2t9-HmTgT5"
+      },
+      "source": [
+        "def clean_text(text):\n",
+        "    '''\n",
+        "    очистка текста\n",
+        "    \n",
+        "    на выходе очищеный текст\n",
+        "    \n",
+        "    '''\n",
+        "    if not isinstance(text, str):\n",
+        "        text = str(text)\n",
+        "    \n",
+        "    text = text.lower()\n",
+        "    text = text.strip('\\n').strip('\\r').strip('\\t')\n",
+        "    text = re.sub(\"-\\s\\r\\n\\|-\\s\\r\\n|\\r\\n\", '', str(text))\n",
+        "\n",
+        "    text = re.sub(\"[0-9]|[-—.,:;_%©«»?*!@#№$^•·&()]|[+=]|[[]|[]]|[/]|\", '', text)\n",
+        "    text = re.sub(r\"\\r\\n\\t|\\n|\\\\s|\\r\\t|\\\\n\", ' ', text)\n",
+        "    text = re.sub(r'[\\xad]|[\\s+]', ' ', text.strip())\n",
+        "    \n",
+        "    #tokens = list(tokenize(text))\n",
+        "    #words = [_.text for _ in tokens]\n",
+        "    #words = [w for w in words if w not in stopword_ru]\n",
+        "    \n",
+        "    #return \" \".join(words)\n",
+        "    return text\n",
+        "\n",
+        "cache = {}\n",
+        "\n",
+        "def lemmatization(text):\n",
+        "    '''\n",
+        "    лемматизация\n",
+        "        [0] если зашел тип не `str` делаем его `str`\n",
+        "        [1] токенизация предложения через razdel\n",
+        "        [2] проверка есть ли в начале слова '-'\n",
+        "        [3] проверка токена с одного символа\n",
+        "        [4] проверка есть ли данное слово в кэше\n",
+        "        [5] лемматизация слова\n",
+        "        [6] проверка на стоп-слова\n",
+        "\n",
+        "    на выходе лист отлемматизированых токенов\n",
+        "    '''\n",
+        "\n",
+        "    # [0]\n",
+        "    if not isinstance(text, str):\n",
+        "        text = str(text)\n",
+        "    \n",
+        "    # [1]\n",
+        "    tokens = list(tokenize(text))\n",
+        "    words = [_.text for _ in tokens]\n",
+        "\n",
+        "    words_lem = []\n",
+        "    for w in words:\n",
+        "        if w[0] == '-': # [2]\n",
+        "            w = w[1:]\n",
+        "        if len(w)>1: # [3]\n",
+        "            if w in cache: # [4]\n",
+        "                words_lem.append(cache[w])\n",
+        "            else: # [5]\n",
+        "                temp_cach = cache[w] = morph.parse(w)[0].normal_form\n",
+        "                words_lem.append(temp_cach)\n",
+        "    \n",
+        "    words_lem_without_stopwords=[i for i in words_lem if not i in stopword_ru] # [6]\n",
+        "    \n",
+        "    return words_lem_without_stopwords"
+      ],
+      "execution_count": 15,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "scrolled": true,
+        "id": "NVy2lO5xTgT5",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "1e431f5b-1fbc-413e-ab47-0708b0eb129d"
+      },
+      "source": [
+        "%%time\n",
+        "#Запускаем очистку текста. Будет долго...\n",
+        "news['title'] = news['title'].apply(lambda x: clean_text(x), 1)"
+      ],
+      "execution_count": 16,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "CPU times: user 19.5 s, sys: 953 ms, total: 20.4 s\n",
+            "Wall time: 20.5 s\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "YfrzwB7dTgT5",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "a42d3c00-a946-465f-903b-b25ca48d56c2"
+      },
+      "source": [
+        "%%time\n",
+        "#Запускаем лемматизацию текста. Будет очень долго...\n",
+        "news['title'] = news['title'].apply(lambda x: lemmatization(x), 1)"
+      ],
+      "execution_count": 17,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "CPU times: user 3min 20s, sys: 147 ms, total: 3min 20s\n",
+            "Wall time: 3min 21s\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "9Fx5sLBoTgT6"
+      },
+      "source": [
+        "А теперь в 3 строчки обучим нашу модель"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "QEyDbY3YTgT6"
+      },
+      "source": [
+        "#сформируем список наших текстов, разбив еще и на пробелы\n",
+        "texts = [t for t in news['title'].values]\n",
+        "\n",
+        "# Create a corpus from a list of texts\n",
+        "common_dictionary = Dictionary(texts)\n",
+        "common_corpus = [common_dictionary.doc2bow(text) for text in texts]"
+      ],
+      "execution_count": 18,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "ZVu8K1sUTgT7"
+      },
+      "source": [
+        "Что такое common_dictionary и как он выглядит"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "3OgFe6kaTgT7",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 37
+        },
+        "outputId": "586b17fe-985e-4382-c376-015fc583839d"
+      },
+      "source": [
+        "common_dictionary[10]"
+      ],
+      "execution_count": 19,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            },
+            "text/plain": [
+              "'ватутин'"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 19
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "kxZn9kKMTgT8"
+      },
+      "source": [
+        "Все просто - это словарь наших слов"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "R0juu2UPTgT8"
+      },
+      "source": [
+        "Запускаем обучение"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "5FVX3nXtTgT8",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "217a1d71-592a-4c97-d1af-1a1af8bb7a4c"
+      },
+      "source": [
+        "%%time\n",
+        "from gensim.models import LdaModel\n",
+        "# Train the model on the corpus.\n",
+        "lda = LdaModel(common_corpus, num_topics=25, id2word=common_dictionary)#, passes=10)"
+      ],
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "CPU times: user 51.5 s, sys: 24.5 s, total: 1min 16s\n",
+            "Wall time: 48.4 s\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "v06BABJXTgT8"
+      },
+      "source": [
+        "from gensim.test.utils import datapath\n",
+        "# Save model to disk.\n",
+        "temp_file = datapath(\"model.lda\")\n",
+        "lda.save(temp_file)\n",
+        "\n",
+        "# Load a potentially pretrained model from disk.\n",
+        "lda = LdaModel.load(temp_file)"
+      ],
+      "execution_count": 21,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "IqawckaZTgT9"
+      },
+      "source": [
+        "Обучили модель. Теперь 2 вопроса:\n",
+        "\n",
+        "1. как выглядят наши темы\n",
+        "2. как получить для документа вектор значений (вероятности принадлежности каждой теме)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "CWAtiBr9TgT9",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "f208ebe0-499c-4667-f94c-0e13bbfe75c4"
+      },
+      "source": [
+        "# Create a new corpus, made of previously unseen documents.\n",
+        "other_texts = [t for t in news['title'].iloc[:3]]\n",
+        "other_corpus = [common_dictionary.doc2bow(text) for text in other_texts]\n",
+        "\n",
+        "unseen_doc = other_corpus[2]\n",
+        "print(other_texts[2])\n",
+        "lda[unseen_doc] "
+      ],
+      "execution_count": 22,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "['форвард', 'авангард', 'томаш', 'заборский', 'прокомментировать', 'игра', 'команда', 'матч', 'чемпионат', 'кхл', 'против', 'атланта', 'nnnn', 'плохой', 'матч', 'нижний', 'новгород', 'против', 'торпедо', 'настраиваться', 'первый', 'минута', 'включиться', 'заборский', 'получиться', 'забросить', 'быстрый', 'гол', 'задать', 'хороший', 'темп', 'поединок', 'играть', 'хороший', 'сторона', 'пять', 'очко', 'выезд', 'девять', 'хороший']\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[(0, 0.7836206), (22, 0.0822211), (23, 0.11269487)]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 22
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "nGXbjDWiTgT9",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "94b2799d-36ac-431b-852a-aa3391ed0d3a"
+      },
+      "source": [
+        "x=lda.show_topics(num_topics=25, num_words=7,formatted=False)\n",
+        "topics_words = [(tp[0], [wd[0] for wd in tp[1]]) for tp in x]\n",
+        "\n",
+        "#Below Code Prints Only Words \n",
+        "for topic,words in topics_words:\n",
+        "    print(\"topic_{}: \".format(topic)+\" \".join(words))"
+      ],
+      "execution_count": 23,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "topic_0: всё очень первый статья наука научный проблема\n",
+            "topic_1: ракета население российский технология запуск министерство россия\n",
+            "topic_2: доллар рак курс писать метод долг болезнь\n",
+            "topic_3: рост цена газ объём вырасти доход нефть\n",
+            "topic_4: банк гражданин ребёнок решение документ депутат право\n",
+            "topic_5: военный россия действие российский закон безопасность nn\n",
+            "topic_6: турист взрыв улица произойти теракт площадь столица\n",
+            "topic_7: самолёт космический территория корабль сша полёт млрд\n",
+            "topic_8: украина украинский уголовный преступление киев признать обвинение\n",
+            "topic_9: система рынок новый эксперт экономика снижение иметь\n",
+            "topic_10: фонд пенсия обращение прожиточный вич святой возраст\n",
+            "topic_11: проект область станция банк земля директор москва\n",
+            "topic_12: nn земля тело мужчина место установить женщина\n",
+            "topic_13: россия российский глава государство путин правительство министр\n",
+            "topic_14: журнал исследователь статья автор поверхность университет ран\n",
+            "topic_15: млн составить тыс общий составлять место показатель\n",
+            "topic_16: выяснить смерть исследование пациент учёный врач остров\n",
+            "topic_17: nn история ребёнок мкс день учёный дом\n",
+            "topic_18: сша обнаружить налог санкция испытание премия boeing\n",
+            "topic_19: учёный исследование жизнь мозг луна женщина nn\n",
+            "topic_20: млрд рубль руб nn сотрудник цб газпром\n",
+            "topic_21: научный военный температура продукция топливо миссия экипаж\n",
+            "topic_22: погибнуть фестиваль форум обнаружить экипаж век израиль\n",
+            "topic_23: спутник орбита телескоп сигнал звезда одежда район\n",
+            "topic_24: геном писать max ндс россиянин извержение льгота\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "9VKBaLLHTgT9"
+      },
+      "source": [
+        "Очень неплохо - большинство тем вполне можно описать о чем они"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "OMrTta4tTgT9"
+      },
+      "source": [
+        "Давайте напишем функцию, которая будет нам возвращать векторное представление новости"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "yVDRtQf2TgT-"
+      },
+      "source": [
+        "#text = news['title'].iloc[0]\n",
+        "\n",
+        "def get_lda_vector(text):\n",
+        "    unseen_doc = common_dictionary.doc2bow(text)\n",
+        "    lda_tuple = lda[unseen_doc]\n",
+        "    not_null_topics = dict(zip([i[0] for i in lda_tuple], [i[1] for i in lda_tuple]))\n",
+        "\n",
+        "    output_vector = []\n",
+        "    for i in range(25):\n",
+        "        if i not in not_null_topics:\n",
+        "            output_vector.append(0)\n",
+        "        else:\n",
+        "            output_vector.append(not_null_topics[i])\n",
+        "    return np.array(output_vector)"
+      ],
+      "execution_count": 24,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wdwbox9sTgT-",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 224
+        },
+        "outputId": "b3d3c03d-3a9f-4eaf-c6e0-23432522c5c8"
+      },
+      "source": [
+        "topic_matrix = pd.DataFrame([get_lda_vector(text) for text in news['title'].values])\n",
+        "topic_matrix.columns = ['topic_{}'.format(i) for i in range(25)]\n",
+        "topic_matrix['doc_id'] = news['doc_id'].values\n",
+        "topic_matrix = topic_matrix[['doc_id']+['topic_{}'.format(i) for i in range(25)]]\n",
+        "topic_matrix.head(5)"
+      ],
+      "execution_count": 25,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>doc_id</th>\n",
+              "      <th>topic_0</th>\n",
+              "      <th>topic_1</th>\n",
+              "      <th>topic_2</th>\n",
+              "      <th>topic_3</th>\n",
+              "      <th>topic_4</th>\n",
+              "      <th>topic_5</th>\n",
+              "      <th>topic_6</th>\n",
+              "      <th>topic_7</th>\n",
+              "      <th>topic_8</th>\n",
+              "      <th>topic_9</th>\n",
+              "      <th>topic_10</th>\n",
+              "      <th>topic_11</th>\n",
+              "      <th>topic_12</th>\n",
+              "      <th>topic_13</th>\n",
+              "      <th>topic_14</th>\n",
+              "      <th>topic_15</th>\n",
+              "      <th>topic_16</th>\n",
+              "      <th>topic_17</th>\n",
+              "      <th>topic_18</th>\n",
+              "      <th>topic_19</th>\n",
+              "      <th>topic_20</th>\n",
+              "      <th>topic_21</th>\n",
+              "      <th>topic_22</th>\n",
+              "      <th>topic_23</th>\n",
+              "      <th>topic_24</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>6</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.00000</td>\n",
+              "      <td>0.020893</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.914911</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.037855</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.019283</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>4896</td>\n",
+              "      <td>0.124669</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.590808</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.05983</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.204205</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>4897</td>\n",
+              "      <td>0.783612</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.00000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.082225</td>\n",
+              "      <td>0.112699</td>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>4898</td>\n",
+              "      <td>0.533733</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.00000</td>\n",
+              "      <td>0.364247</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.064436</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.027583</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>4899</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.00000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.062139</td>\n",
+              "      <td>0.912996</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "   doc_id   topic_0  topic_1  topic_2  ...  topic_21  topic_22  topic_23  topic_24\n",
+              "0       6  0.000000      0.0      0.0  ...  0.000000  0.000000  0.000000  0.019283\n",
+              "1    4896  0.124669      0.0      0.0  ...  0.000000  0.000000  0.000000  0.204205\n",
+              "2    4897  0.783612      0.0      0.0  ...  0.000000  0.082225  0.112699  0.000000\n",
+              "3    4898  0.533733      0.0      0.0  ...  0.027583  0.000000  0.000000  0.000000\n",
+              "4    4899  0.000000      0.0      0.0  ...  0.000000  0.000000  0.000000  0.000000\n",
+              "\n",
+              "[5 rows x 26 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 25
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "JJEK7xtdTgT-"
+      },
+      "source": [
+        "Прекрасно, мы получили вектора наших новостей! И даже умеем интерпретировать получившиеся темы.\n",
+        "\n",
+        "Можно двигаться далее"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "DtePwL5vTgT-"
+      },
+      "source": [
+        "### Следующий шаг - векторные представления пользователей"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "scrolled": true,
+        "id": "LL7B17yYTgT-",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 142
+        },
+        "outputId": "43c52288-97b6-4468-c435-5986767bf36f"
+      },
+      "source": [
+        "users.head(3)"
+      ],
+      "execution_count": 26,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>uid</th>\n",
+              "      <th>articles</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>u105138</td>\n",
+              "      <td>[293672, 293328, 293001, 293622, 293126, 1852]</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>u108690</td>\n",
+              "      <td>[3405, 1739, 2972, 1158, 1599, 322665]</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>u108339</td>\n",
+              "      <td>[1845, 2009, 2356, 1424, 2939, 323389]</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "       uid                                        articles\n",
+              "0  u105138  [293672, 293328, 293001, 293622, 293126, 1852]\n",
+              "1  u108690          [3405, 1739, 2972, 1158, 1599, 322665]\n",
+              "2  u108339          [1845, 2009, 2356, 1424, 2939, 323389]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 26
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ljh8nOwaTgT_"
+      },
+      "source": [
+        "doc_dict = dict(zip(topic_matrix['doc_id'].values, topic_matrix[['topic_{}'.format(i) for i in range(25)]].values))"
+      ],
+      "execution_count": 27,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "boVGLDOqTgT_",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "61e4392b-24db-4b38-b5fd-496c701bae0b"
+      },
+      "source": [
+        "doc_dict[293622]"
+      ],
+      "execution_count": 28,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([0.02547005, 0.04839457, 0.        , 0.        , 0.14019765,\n",
+              "       0.        , 0.        , 0.0170087 , 0.04063927, 0.        ,\n",
+              "       0.05724655, 0.01442727, 0.        , 0.05400291, 0.        ,\n",
+              "       0.        , 0.        , 0.14958201, 0.04278425, 0.31760371,\n",
+              "       0.03566117, 0.        , 0.        , 0.05182061, 0.        ])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 28
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "jGygT2a3TgT_"
+      },
+      "source": [
+        "user_articles_list = users['articles'].iloc[33]\n",
+        "\n",
+        "def get_user_embedding(user_articles_list):\n",
+        "    user_articles_list = eval(user_articles_list)\n",
+        "    user_vector = np.array([doc_dict[doc_id] for doc_id in user_articles_list])\n",
+        "    user_vector = np.median(user_vector, 0)\n",
+        "    return user_vector"
+      ],
+      "execution_count": 29,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Au34rxvGTgT_",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "64c0e6ad-bfa1-48aa-d106-91711c9f9c4f"
+      },
+      "source": [
+        "get_user_embedding(user_articles_list)"
+      ],
+      "execution_count": 30,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([0.02857794, 0.02988049, 0.        , 0.        , 0.        ,\n",
+              "       0.10035353, 0.        , 0.        , 0.        , 0.08864804,\n",
+              "       0.        , 0.00603824, 0.        , 0.07346082, 0.01904545,\n",
+              "       0.        , 0.        , 0.        , 0.00865277, 0.        ,\n",
+              "       0.        , 0.        , 0.        , 0.        , 0.        ])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 30
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "xkf0VzU3TgT_"
+      },
+      "source": [
+        "Интересовался новостями с топиками topic_3, topic_14 (что-то про политику и государство)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "cbkHsgPeTgUA"
+      },
+      "source": [
+        "#users['articles'].iloc[33]"
+      ],
+      "execution_count": 31,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "scrolled": true,
+        "id": "0ZOoZ8_QTgUA"
+      },
+      "source": [
+        "#\" \".join(news[news['doc_id']==323186]['title'].iloc[0])"
+      ],
+      "execution_count": 32,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "VEskAVUnTgUA"
+      },
+      "source": [
+        "Теперь получим эмбединги для всех пользователей и проверим их качество на конкретной downstream-задаче"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "qEqugNCoTgUA",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 162
+        },
+        "outputId": "04415949-5379-4f12-f279-bc5ef46ffbc2"
+      },
+      "source": [
+        "user_embeddings = pd.DataFrame([i for i in users['articles'].apply(lambda x: get_user_embedding(x), 1)])\n",
+        "user_embeddings.columns = ['topic_{}'.format(i) for i in range(25)]\n",
+        "user_embeddings['uid'] = users['uid'].values\n",
+        "user_embeddings = user_embeddings[['uid']+['topic_{}'.format(i) for i in range(25)]]\n",
+        "user_embeddings.head(3)"
+      ],
+      "execution_count": 33,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>uid</th>\n",
+              "      <th>topic_0</th>\n",
+              "      <th>topic_1</th>\n",
+              "      <th>topic_2</th>\n",
+              "      <th>topic_3</th>\n",
+              "      <th>topic_4</th>\n",
+              "      <th>topic_5</th>\n",
+              "      <th>topic_6</th>\n",
+              "      <th>topic_7</th>\n",
+              "      <th>topic_8</th>\n",
+              "      <th>topic_9</th>\n",
+              "      <th>topic_10</th>\n",
+              "      <th>topic_11</th>\n",
+              "      <th>topic_12</th>\n",
+              "      <th>topic_13</th>\n",
+              "      <th>topic_14</th>\n",
+              "      <th>topic_15</th>\n",
+              "      <th>topic_16</th>\n",
+              "      <th>topic_17</th>\n",
+              "      <th>topic_18</th>\n",
+              "      <th>topic_19</th>\n",
+              "      <th>topic_20</th>\n",
+              "      <th>topic_21</th>\n",
+              "      <th>topic_22</th>\n",
+              "      <th>topic_23</th>\n",
+              "      <th>topic_24</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>u105138</td>\n",
+              "      <td>0.033841</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.028540</td>\n",
+              "      <td>0.00000</td>\n",
+              "      <td>0.020555</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.038545</td>\n",
+              "      <td>0.016395</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.024687</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.078205</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.010782</td>\n",
+              "      <td>0.056162</td>\n",
+              "      <td>0.017831</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.014321</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>u108690</td>\n",
+              "      <td>0.139986</td>\n",
+              "      <td>0.053572</td>\n",
+              "      <td>0.008127</td>\n",
+              "      <td>0.03348</td>\n",
+              "      <td>0.064087</td>\n",
+              "      <td>0.077056</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.014052</td>\n",
+              "      <td>0.105762</td>\n",
+              "      <td>0.035436</td>\n",
+              "      <td>0.015561</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.006492</td>\n",
+              "      <td>0.086195</td>\n",
+              "      <td>0.021502</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.009842</td>\n",
+              "      <td>0.042004</td>\n",
+              "      <td>0.018132</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.005696</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>u108339</td>\n",
+              "      <td>0.062851</td>\n",
+              "      <td>0.016598</td>\n",
+              "      <td>0.025630</td>\n",
+              "      <td>0.01051</td>\n",
+              "      <td>0.057224</td>\n",
+              "      <td>0.097867</td>\n",
+              "      <td>0.056116</td>\n",
+              "      <td>0.015027</td>\n",
+              "      <td>0.028733</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.028862</td>\n",
+              "      <td>0.168719</td>\n",
+              "      <td>0.150919</td>\n",
+              "      <td>0.019016</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.010314</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.023473</td>\n",
+              "      <td>0.005489</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "       uid   topic_0   topic_1  ...  topic_22  topic_23  topic_24\n",
+              "0  u105138  0.033841  0.000000  ...  0.014321  0.000000       0.0\n",
+              "1  u108690  0.139986  0.053572  ...  0.000000  0.005696       0.0\n",
+              "2  u108339  0.062851  0.016598  ...  0.000000  0.000000       0.0\n",
+              "\n",
+              "[3 rows x 26 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 33
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "U4t2ZIuOTgUB"
+      },
+      "source": [
+        "Датасет готов - можно попробовать обучить модель. Загрузим нашу разметку"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "fqo1y-xuTgUB",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 142
+        },
+        "outputId": "20c32ebb-d9ab-4f23-f619-4e68236c8cc6"
+      },
+      "source": [
+        "target = pd.read_csv(\"/content/drive/MyDrive/Notebooks/ML_in_business/2/lection2_materials/users_churn.csv\")\n",
+        "target.head(3)"
+      ],
+      "execution_count": 34,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>uid</th>\n",
+              "      <th>churn</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>u107120</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>u102277</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>u102444</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "       uid  churn\n",
+              "0  u107120      0\n",
+              "1  u102277      0\n",
+              "2  u102444      0"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 34
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "J0uFEYl9TgUB",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 162
+        },
+        "outputId": "eb85b69c-e10e-4289-9e90-d08ff24996b3"
+      },
+      "source": [
+        "X = pd.merge(user_embeddings, target, 'left')\n",
+        "X.head(3)"
+      ],
+      "execution_count": 35,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>uid</th>\n",
+              "      <th>topic_0</th>\n",
+              "      <th>topic_1</th>\n",
+              "      <th>topic_2</th>\n",
+              "      <th>topic_3</th>\n",
+              "      <th>topic_4</th>\n",
+              "      <th>topic_5</th>\n",
+              "      <th>topic_6</th>\n",
+              "      <th>topic_7</th>\n",
+              "      <th>topic_8</th>\n",
+              "      <th>topic_9</th>\n",
+              "      <th>topic_10</th>\n",
+              "      <th>topic_11</th>\n",
+              "      <th>topic_12</th>\n",
+              "      <th>topic_13</th>\n",
+              "      <th>topic_14</th>\n",
+              "      <th>topic_15</th>\n",
+              "      <th>topic_16</th>\n",
+              "      <th>topic_17</th>\n",
+              "      <th>topic_18</th>\n",
+              "      <th>topic_19</th>\n",
+              "      <th>topic_20</th>\n",
+              "      <th>topic_21</th>\n",
+              "      <th>topic_22</th>\n",
+              "      <th>topic_23</th>\n",
+              "      <th>topic_24</th>\n",
+              "      <th>churn</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>u105138</td>\n",
+              "      <td>0.033841</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.028540</td>\n",
+              "      <td>0.00000</td>\n",
+              "      <td>0.020555</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.038545</td>\n",
+              "      <td>0.016395</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.024687</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.078205</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.010782</td>\n",
+              "      <td>0.056162</td>\n",
+              "      <td>0.017831</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.014321</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>u108690</td>\n",
+              "      <td>0.139986</td>\n",
+              "      <td>0.053572</td>\n",
+              "      <td>0.008127</td>\n",
+              "      <td>0.03348</td>\n",
+              "      <td>0.064087</td>\n",
+              "      <td>0.077056</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.014052</td>\n",
+              "      <td>0.105762</td>\n",
+              "      <td>0.035436</td>\n",
+              "      <td>0.015561</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.006492</td>\n",
+              "      <td>0.086195</td>\n",
+              "      <td>0.021502</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.009842</td>\n",
+              "      <td>0.042004</td>\n",
+              "      <td>0.018132</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.005696</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>u108339</td>\n",
+              "      <td>0.062851</td>\n",
+              "      <td>0.016598</td>\n",
+              "      <td>0.025630</td>\n",
+              "      <td>0.01051</td>\n",
+              "      <td>0.057224</td>\n",
+              "      <td>0.097867</td>\n",
+              "      <td>0.056116</td>\n",
+              "      <td>0.015027</td>\n",
+              "      <td>0.028733</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.028862</td>\n",
+              "      <td>0.168719</td>\n",
+              "      <td>0.150919</td>\n",
+              "      <td>0.019016</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>0.010314</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.023473</td>\n",
+              "      <td>0.005489</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>0.0</td>\n",
+              "      <td>1</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "       uid   topic_0   topic_1   topic_2  ...  topic_22  topic_23  topic_24  churn\n",
+              "0  u105138  0.033841  0.000000  0.028540  ...  0.014321  0.000000       0.0      0\n",
+              "1  u108690  0.139986  0.053572  0.008127  ...  0.000000  0.005696       0.0      1\n",
+              "2  u108339  0.062851  0.016598  0.025630  ...  0.000000  0.000000       0.0      1\n",
+              "\n",
+              "[3 rows x 27 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 35
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "FdXTdBjvTgUB"
+      },
+      "source": [
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "#import itertools\n",
+        "\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "%matplotlib inline"
+      ],
+      "execution_count": 36,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "x0uEl8vTTgUB"
+      },
+      "source": [
+        "#разделим данные на train/test\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X[['topic_{}'.format(i) for i in range(25)]], \n",
+        "                                                    X['churn'], random_state=0)"
+      ],
+      "execution_count": 37,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "5JMnGLUcTgUC",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "3e1d3595-6f6c-4de0-b85d-0b725e3f0df2"
+      },
+      "source": [
+        "logreg = LogisticRegression()\n",
+        "#обучим \n",
+        "logreg.fit(X_train, y_train)"
+      ],
+      "execution_count": 38,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\n",
+              "                   intercept_scaling=1, l1_ratio=None, max_iter=100,\n",
+              "                   multi_class='auto', n_jobs=None, penalty='l2',\n",
+              "                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\n",
+              "                   warm_start=False)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 38
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "9ia7FHQsTgUC",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "28fb835b-4c20-4a6a-a9f1-aa9710843acf"
+      },
+      "source": [
+        "#наши прогнозы для тестовой выборки\n",
+        "preds = logreg.predict_proba(X_test)[:, 1]\n",
+        "preds[:10]"
+      ],
+      "execution_count": 39,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([0.11089443, 0.04115746, 0.31457235, 0.1154761 , 0.09921954,\n",
+              "       0.06619007, 0.11919497, 0.08807084, 0.06061756, 0.17775498])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 39
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "TwRXqoKqTgUC"
+      },
+      "source": [
+        "from sklearn.metrics import f1_score, roc_auc_score, precision_score, classification_report, precision_recall_curve, confusion_matrix"
+      ],
+      "execution_count": 40,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "OnRM_63bTgUC"
+      },
+      "source": [
+        "### Рассчитаем Precision, Recall, F_score"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "1lShoJGsTgUC",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "a0d6fe82-fb9c-49bb-effb-2bba74941cf0"
+      },
+      "source": [
+        "precision, recall, thresholds = precision_recall_curve(y_test, preds)\n",
+        "fscore = (2 * precision * recall) / (precision + recall)\n",
+        "# locate the index of the largest f score\n",
+        "ix = np.argmax(fscore)\n",
+        "print('Best Threshold=%f, F-Score=%.3f, Precision=%.3f, Recall=%.3f' % (thresholds[ix], \n",
+        "                                                                        fscore[ix],\n",
+        "                                                                        precision[ix],\n",
+        "                                                                        recall[ix]))"
+      ],
+      "execution_count": 41,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Best Threshold=0.204701, F-Score=0.740, Precision=0.656, Recall=0.849\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tx4TKAgITgUC"
+      },
+      "source": [
+        "def plot_confusion_matrix(cm, classes,\n",
+        "                          normalize=False,\n",
+        "                          title='Confusion matrix',\n",
+        "                          cmap=plt.cm.Blues):\n",
+        "    \"\"\"\n",
+        "    This function prints and plots the confusion matrix.\n",
+        "    Normalization can be applied by setting `normalize=True`.\n",
+        "    \"\"\"\n",
+        "    plt.imshow(cm, interpolation='nearest', cmap=cmap)\n",
+        "    plt.title(title)\n",
+        "    plt.colorbar()\n",
+        "    tick_marks = np.arange(len(classes))\n",
+        "    plt.xticks(tick_marks, classes, rotation=45)\n",
+        "    plt.yticks(tick_marks, classes)\n",
+        "\n",
+        "    if normalize:\n",
+        "        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]\n",
+        "        print(\"Normalized confusion matrix\")\n",
+        "    else:\n",
+        "        print('Confusion matrix, without normalization')\n",
+        "\n",
+        "    print(cm)\n",
+        "\n",
+        "    thresh = cm.max() / 2.\n",
+        "    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):\n",
+        "        plt.text(j, i, cm[i, j],\n",
+        "                 horizontalalignment=\"center\",\n",
+        "                 color=\"white\" if cm[i, j] > thresh else \"black\")\n",
+        "\n",
+        "    plt.tight_layout()\n",
+        "    plt.ylabel('True label')\n",
+        "    plt.xlabel('Predicted label')"
+      ],
+      "execution_count": 42,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ZgqrcAB0dS6r"
+      },
+      "source": [
+        "import itertools"
+      ],
+      "execution_count": 43,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "VV3Bct94TgUD",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 644
+        },
+        "outputId": "7a2240df-6b4d-4998-907a-a515162d4fb8"
+      },
+      "source": [
+        "#мы уже нашли ранее \"оптимальный\" порог, когда максимизировали f_score\n",
+        "font = {'size' : 15}\n",
+        "\n",
+        "plt.rc('font', **font)\n",
+        "\n",
+        "cnf_matrix = confusion_matrix(y_test, preds>thresholds[ix])\n",
+        "plt.figure(figsize=(10, 8))\n",
+        "plot_confusion_matrix(cnf_matrix, classes=['Non-Churn', 'churn'],\n",
+        "                      title='Confusion matrix')\n",
+        "plt.savefig(\"conf_matrix.png\")\n",
+        "plt.show()"
+      ],
+      "execution_count": 44,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Confusion matrix, without normalization\n",
+            "[[1646  109]\n",
+            " [  38  207]]\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 720x576 with 2 Axes>"
+            ]
+          },
+          "metadata": {
+            "tags": [],
+            "needs_background": "light"
+          }
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "VSsEG2_MTgUD",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "99afef7a-6107-4dcc-cf0f-a96a357938be"
+      },
+      "source": [
+        "roc_auc_score(y_test, preds)"
+      ],
+      "execution_count": 45,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.9648840048840049"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 45
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "iurl5B5jTgUD"
+      },
+      "source": [
+        "В целом мы видим, что получившиеся векторные представления содержат какой-то сигнал и позволяют решать нашу прикладную задачу. "
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "zXSptokcTgUD"
+      },
+      "source": [
+        "### Домашнее задание"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "SuJneT1ITgUD"
+      },
+      "source": [
+        "1. Самостоятельно разобраться с тем, что такое tfidf (документация https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html и еще - https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction)\n",
+        "2. Модифицировать код функции get_user_embedding таким образом, чтобы считалось не среднее (как в примере np.mean), а медиана. Применить такое преобразование к данным, обучить модель прогнозирования оттока и посчитать метрики качества и сохранить их: roc auc, precision/recall/f_score (для 3 последних - подобрать оптимальный порог с помощью precision_recall_curve, как это делалось на уроке)\n",
+        "3. Повторить п.2, но используя уже не медиану, а max\n",
+        "4. (опциональное, если очень хочется) Воспользовавшись полученными знаниями из п.1, повторить пункт 2, но уже взвешивая новости по tfidf (подсказка: нужно получить веса-коэффициенты для каждого документа. Не все документы одинаково информативны и несут какой-то положительный сигнал). Подсказка 2 - нужен именно idf, как вес.\n",
+        "5. Сформировать на выходе единую таблицу, сравнивающую качество 3 разных метода получения эмбедингов пользователей: mean, median, max, idf_mean по метрикам roc_auc, precision, recall, f_score\n",
+        "6. Сделать самостоятельные выводы и предположения о том, почему тот или ной способ оказался эффективнее остальных"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "FCE1y3AyuOuc"
+      },
+      "source": [
+        "# Добавим на вход аггрегирующую функцию\n",
+        "def get_user_embedding(user_articles_list, aggregation):\n",
+        "    user_articles_list = eval(user_articles_list)\n",
+        "    user_vector = np.array([doc_dict[doc_id] for doc_id in user_articles_list])\n",
+        "    user_vector = aggregation(user_vector, 0)\n",
+        "    return user_vector"
+      ],
+      "execution_count": 46,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "F-gH_zkzuYNN"
+      },
+      "source": [
+        "#Словарь с аггрегирующими функциями\n",
+        "aggregation = {'mean' : np.mean, \n",
+        "               'median' : np.median,\n",
+        "               'max' : np.max}\n",
+        "\n",
+        " #Здесь будет наша таблица              \n",
+        "result = {'agg_func': [],\n",
+        "           'precision': [],\n",
+        "           'recall': [],\n",
+        "           'fscore':[], \n",
+        "           'roc_auc':[]}\n",
+        "\n",
+        "for agg_name, agg_func in aggregation.items():\n",
+        "  user_embeddings = pd.DataFrame([i for i in users['articles'].apply(lambda x: get_user_embedding(x, agg_func), 1)])\n",
+        "  user_embeddings.columns = ['topic_{}'.format(i) for i in range(25)]\n",
+        "  user_embeddings['uid'] = users['uid'].values\n",
+        "  user_embeddings = user_embeddings[['uid']+['topic_{}'.format(i) for i in range(25)]]\n",
+        "\n",
+        "  X = pd.merge(user_embeddings, target, 'left')\n",
+        "  #разделим данные на train/test\n",
+        "  X_train, X_test, y_train, y_test = train_test_split(X[['topic_{}'.format(i) for i in range(25)]], \n",
+        "                                                    X['churn'], random_state=0)\n",
+        "\n",
+        "  logreg.fit(X_train, y_train)\n",
+        "\n",
+        "  preds = logreg.predict_proba(X_test)[:, 1]\n",
+        "\n",
+        "  precision, recall, thresholds = precision_recall_curve(y_test, preds)\n",
+        "  fscore = (2 * precision * recall) / (precision + recall)\n",
+        "  # locate the index of the largest f score\n",
+        "  ix = np.argmax(fscore)\n",
+        "\n",
+        "  result['agg_func'].append(agg_name)\n",
+        "  result['precision'].append(precision[ix])\n",
+        "  result['recall'].append(recall[ix])\n",
+        "  result['fscore'].append(fscore[ix])\n",
+        "  result['roc_auc'].append(roc_auc_score(y_test, preds))"
+      ],
+      "execution_count": 47,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 142
+        },
+        "id": "6XVciXrFvIDG",
+        "outputId": "a45e831d-fefd-410d-edfa-c469ca94c9d5"
+      },
+      "source": [
+        "result = pd.DataFrame(result)\n",
+        "result"
+      ],
+      "execution_count": 48,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>agg_func</th>\n",
+              "      <th>precision</th>\n",
+              "      <th>recall</th>\n",
+              "      <th>fscore</th>\n",
+              "      <th>roc_auc</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>mean</td>\n",
+              "      <td>0.574534</td>\n",
+              "      <td>0.755102</td>\n",
+              "      <td>0.652557</td>\n",
+              "      <td>0.937785</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>median</td>\n",
+              "      <td>0.656151</td>\n",
+              "      <td>0.848980</td>\n",
+              "      <td>0.740214</td>\n",
+              "      <td>0.964884</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>max</td>\n",
+              "      <td>0.756757</td>\n",
+              "      <td>0.800000</td>\n",
+              "      <td>0.777778</td>\n",
+              "      <td>0.974724</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  agg_func  precision    recall    fscore   roc_auc\n",
+              "0     mean   0.574534  0.755102  0.652557  0.937785\n",
+              "1   median   0.656151  0.848980  0.740214  0.964884\n",
+              "2      max   0.756757  0.800000  0.777778  0.974724"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 48
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "JwWPrGPS3JRM"
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "5E9arLzeTgUD"
+      },
+      "source": [
+        "#### Ссылки"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "35PP5x8OTgUE"
+      },
+      "source": [
+        "1. http://www.machinelearning.ru/wiki/images/d/d5/Voron17survey-artm.pdf\n",
+        "2. https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "tGMF7SbDTgUE"
+      },
+      "source": [
+        "#### Библиотеки, которые нужно установить:\n",
+        "\n",
+        "1. gensim\n",
+        "2. razdel\n",
+        "3. pymorphy2\n",
+        "4. nltk"
+      ]
+    }
+  ]
+}
